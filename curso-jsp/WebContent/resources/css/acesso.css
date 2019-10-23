@@ -1,0 +1,23 @@
+@charset "ISO-8859-1";
+
+body {
+	background-color: #85BF65;
+}
+
+.centraliza {
+	text-align: center;
+	background-color: #fff;
+	width: 45%;
+	height: auto;
+	margin: 300px auto;
+	padding: 40px 7px;
+	-webkit-box-shadow: -2px 7px 29px -6px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: -2px 7px 29px -6px rgba(0, 0, 0, 0.75);
+	box-shadow: -2px 7px 29px -6px rgba(0, 0, 0, 0.75);
+}
+
+.centraliza h3 {
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	margin-bottom: 50px;
+}

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<!-- ANOTAÇÕES DE ESTUDO
+O http://java.sun.com/jsf/html serve para carregar a biblioteca de elementos graficos do JSF
+E o http://java.sun.com/jsf/core serve para carregar a biblioteca do core do JSF, que não tem o 
+suporte grafico, ele da suporte para os elementos do html do JSF.
+	   
+CONTROLE DE PERMISSÕES DE PERFIL DE USUARIO
+Podemos controlar o que cada perfil de usuario vai visualizar no sistema adicionando no atributo
+rendered="#{pessoaBean.permitirAcesso('ADMINISTRADOR')}"
+A linha acima está chamando um método responsavel por comparar se o atributo do perfilUser é igual 
+ao da condição.
+	     
+
+	     
+-->
+	     
+<h:head>
+	<title>Cadastro de usuário</title>
+</h:head>
+
+<h:body>
+
+	<h:form>
+		<h:commandLink value="Administração" action="primeirapagina" style="margin-left:1cm;"/>
+		<h:commandLink value="Lançamentos" action="lancamento" style="margin-left:1cm;"/>
+		<h:commandLink value="Trocar Usuario" action="index" style="margin-left:1cm;"/>
+	</h:form>
+
+	<h:form id="formPessoa" rendered="#{pessoaBean.permitirAcesso('ADMINISTRADOR')}">
+	
+		<h:panelGrid columns="2">
+			<f:facet name="header">
+				<h:outputText value="Cadastro de usuario" />
+			</f:facet>
+
+			<h:outputLabel value="Id:" />
+			<h:inputText value="#{pessoaBean.pessoa.id}" readonly="true" />
+
+			<h:outputLabel value="Nome:" />
+			<h:inputText value="#{pessoaBean.pessoa.nome}" />
+
+			<h:outputLabel value="Sobrenome:" />
+			<h:inputText value="#{pessoaBean.pessoa.sobrenome}" />
+
+			<h:outputLabel value="Idade:" />
+			<h:inputText value="#{pessoaBean.pessoa.idade}" />
+
+			<h:outputLabel value="Sexo:" />
+			<h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}"
+				required="false">
+				<f:selectItem itemValue="NÃO ESPECIFICADO" itemLabel="Selecione"
+					noSelectionOption="true" />
+				<f:selectItem itemValue="MASCULINO" itemLabel="Masculino" />
+				<f:selectItem itemValue="FEMININO" itemLabel="Feminino" />
+			</h:selectOneMenu>
+
+			<h:outputLabel value="Frameworks:" />
+			<h:selectManyMenu id="campoframeworks" style="height:150px;"
+				value="#{pessoaBean.pessoa.frameworks}">
+				<f:selectItem itemValue="Hibernate" />
+				<f:selectItem itemValue="Spring MVC" />
+				<f:selectItem itemValue="JPA" />
+				<f:selectItem itemValue="Primefaces" />
+				<f:selectItem itemValue="JSF" />
+			</h:selectManyMenu>
+
+			<h:outputLabel value="Ativo:" />
+			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}" />
+			
+			<h:outputLabel value="Login:" />
+			<h:inputText value="#{pessoaBean.pessoa.login}"/>
+			
+			<h:outputLabel value="Senha:"/>
+			<h:inputSecret value="#{pessoaBean.pessoa.senha}"/>
+			
+			<h:outputLabel value="Perfil:"/>
+			<h:selectOneMenu id="perfil" value="#{pessoaBean.pessoa.perfilUser}" required="false">
+				<f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+				<f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador"/>
+				<f:selectItem itemValue="SECRETARIO" itemLabel="Secretário"/>
+				<f:selectItem itemValue="RECEPCIONISTA" itemLabel="Recepcionista"/>
+			</h:selectOneMenu>
+			
+			<h:outputLabel />
+
+			<h:panelGroup rendered="#{pessoaBean.permitirAcesso('ADMINISTRADOR')}">
+				<h:commandButton value="Novo" action="#{pessoaBean.novo}"
+					image="/resources/img/new_user.png" />
+				<!-- Botão responsavel por limpar a tela ele usa o método merge. -->
+				<h:commandButton value="Salvar" action="#{pessoaBean.salvar}"
+					image="/resources/img/save_user.png" />
+				<h:commandButton value="Remove" action="#{pessoaBean.remove}" 
+					image="/resources/img/remove_user.png" />
+				<h:commandButton value="Limpar" type="reset" 
+					image="/resources/img/limpar_campos.png" />
+			</h:panelGroup>
+		</h:panelGrid>
+
+		<h:dataTable value="#{pessoaBean.pessoas}" var="pessoa" border="3"
+			cellpadding="6">
+			<f:facet name="header">
+				Lista de usuários cadastrados
+			</f:facet>
+			<h:column>
+				<f:facet name="header">ID</f:facet>
+				<h:outputText value="#{pessoa.id}" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{pessoa.nome}" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">Sobrenome</f:facet>
+				<h:outputText value="#{pessoa.sobrenome}" />
+			</h:column>
+
+			<!-- Usamos o column para criar a coluna que vai listar os registros do banco de dados.
+			usamos uma propriedade do jsf core a setPropertyActionListener para  inserir um link de
+			ação onde passamos o value que é o objeto da linha e no target apontamos a classe managedBean onde 
+			desejamos injetar os dados do objeto pessoa, fazemos um apontamento da classe Bean onde o
+			objeto parametro do value se encontra.-->
+			<h:column rendered="#{pessoaBean.permitirAcesso('ADMINISTRADOR')}">
+				<f:facet name="header">Ação</f:facet>
+				<h:commandLink title="Editar">
+					<h:graphicImage value="/resources/img/editar.png" />
+					<f:setPropertyActionListener value="#{pessoa}"
+						target="#{pessoaBean.pessoa}" />
+				</h:commandLink>
+				<h:commandLink action="#{pessoaBean.remove}">
+					<f:setPropertyActionListener value="#{pessoa}"
+						target="#{pessoaBean.pessoa}" />
+					<h:graphicImage value="/resources/img/excluir.png" />
+				</h:commandLink>
+			</h:column>
+			
+		</h:dataTable>
+
+	</h:form>
+</h:body>
+
+</html>

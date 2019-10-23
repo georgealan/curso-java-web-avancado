@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="meuprimeiroprojetojsf">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<!-- Neste arquivo colocamos todas as classes que vão servir de modelo para banco de dados, todas Classes com Entity
+		devem ser declaradas aqui na tag class.-->
+		<class>br.com.entidades.Pessoa</class>
+		<class>br.com.entidades.Lancamento</class>
+
+		<!-- Dentro de properties deve ficar as propriedades de conexão com o banco de dados,  -->
+		<properties>
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:postgresql://localhost:5432/meuprimeiroprojetojsf" />
+			<property name="javax.persistence.jdbc.user"
+				value="postgres" />
+			<property name="javax.persistence.jdbc.password"
+				value="admin" />
+			<property name="javax.persistence.jdbc.driver"
+				value="org.postgresql.Driver" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" /> <!-- Seta o dialeto que devera ser usado aqui usaremos o dialeto do postgresql -->
+			<property name="hibernate.show_sql" value="true" /> <!-- Serve para mostrar o SQL no console. -->
+			<property name="hibernate.format_sql" value="true" /> <!-- Serve para formatar o SQL que vai ser exibido no console. -->
+			
+			<!-- Serve para setar que o hibernate faça a criação e o update das classes para banco de dados automaticamente-->
+			<property name="hibernate.hbm2ddl.auto" value="update" /> 
+		</properties>
+	</persistence-unit>
+</persistence>
